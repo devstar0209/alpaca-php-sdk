@@ -26,7 +26,6 @@ class Response
     {
         $this->request = $request;
         $this->seconds = $seconds;
-        $this->body    = json_decode($this->request->getBody()->getContents(),true);
     }
 
     /**
@@ -36,7 +35,7 @@ class Response
      *
      */
     public function contents() {
-        return $this->body;
+        return json_decode($this->request->getBody()->getContents(),true);
     }
 
     /**

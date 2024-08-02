@@ -4,6 +4,7 @@ use Alpaca\Request;
 use Alpaca\Account\Account;
 use Alpaca\Account\Orders;
 use Alpaca\Account\Activity;
+use Alpaca\Account\Positions;
 
 class Alpaca
 {

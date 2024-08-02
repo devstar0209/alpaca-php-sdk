@@ -3,9 +3,7 @@
 use Carbon\Carbon;
 use Alpaca\Alpaca;
 
-use Amp\Websocket AS AmpSocket;
-use Amp\Loop AS AmpLoop;
-use Amp\Websocket\ClosedException;
+use function Amp\Websocket\Client\connect;
 
 class WebSocket
 {
@@ -34,13 +32,9 @@ class WebSocket
         $data = $this->getPrincipals();
         $credentials = $this->setCredentials($data);
 
-        AmpLoop::run(function () use ($fn, $error, $data, $credentials)
-            {
-                try 
-                {
-                    $connection = yield AmpSocket\connect('wss://'.$data['streamerInfo']['streamerSocketUrl'].'/ws');
+        $connection = connect('wss://'.$data['streamerInfo']['streamerSocketUrl'].'/ws');
 
-                    yield $connection->send('
+        $connection->sendText('
                     {
                         "requests":[
                             {
@@ -57,8 +51,7 @@ class WebSocket
                             }
                         ]
                     }');
-
-                    yield $connection->send('
+        $connection->sendText('
                     {
                         "requests":[
                             {
@@ -73,8 +66,7 @@ class WebSocket
                             }
                         ]
                     }'); 
-
-                    yield $connection->send('
+        $connection->sendText('
                     {
                         "requests":[
                             {
@@ -89,34 +81,22 @@ class WebSocket
                                 }
                             }
                         ]
-                    }'); 
-                                        
-                    $i = 0;
+                    }');
+        $i = 0;
 
-                    while ($message = yield $connection->receive()) 
-                    {
-                        $i++;
-                        $payload = yield $message->buffer();
+        while ($message = $connection->receive()) 
+        {
+            $i++;
+            $payload = $message->buffer();
 
-                        $r = $fn(json_decode($payload,1),$i);
+            $r = $fn(json_decode($payload,1),$i);
 
-                        if ($r == false) {
-                            $connection->close();
-                            break;
-                        }
-                    }
-                }
-                catch (ClosedException $e) {
-                    return $error('CLOSED',$e);
-                }
-                catch (\Throwable $e) {
-                    return $error('ERROR',$e);
-                }
-                catch (\Exception $e) {
-                    return $error('ERROR',$e);
-                }
+            if ($r == false) {
+                $connection->close();
+                break;
             }
-        );
+        }
+
     }
 
     /**
@@ -156,7 +136,7 @@ class WebSocket
      */
     public function getPrincipals() 
     {
-        return $this->td->accounts()->userPrincipals([
+        return $this->alp->accounts()->userPrincipals([
             'fields' => 'streamerSubscriptionKeys,streamerConnectionInfo,preferences,surrogateIds'
         ]); 
     }
