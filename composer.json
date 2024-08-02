@@ -16,7 +16,7 @@
         "php": ">=8.0",
 		"guzzlehttp/guzzle": "^7.2",
 		"amphp/websocket-client": "^0.2.4",
-		"nesbot/carbon": "^3.0.0"
+		"nesbot/carbon": "^2.71.0"
 	},
 
 	"require-dev": {
