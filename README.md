@@ -8,7 +8,7 @@ Also, check out the [Polygon PHP SDK](https://github.com/tmarois/polygon-php-sdk
 
 Use [Composer](http://getcomposer.org/) to install package.
 
-Run `composer require tmarois/alpaca-php-sdk:^1.0`
+Run `composer require devstar/alpaca-php-sdk`
 
 ## Getting Started
 
