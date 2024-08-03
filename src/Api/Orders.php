@@ -1,4 +1,4 @@
-<?php namespace Alpaca\Account;
+<?php namespace Alpaca\Api;
 
 use Alpaca\Alpaca;
 
@@ -8,7 +8,7 @@ class Orders
     /**
      * Response array
      *
-     * @var Alpaca\Alpaca
+     * @var \Alpaca\Alpaca
      */
     private $alp;
 
@@ -26,7 +26,7 @@ class Orders
      * @return array
      */
     public function get($id) {
-        return $this->alp->request('order',['id'=>$id],'GET')->results();
+        return $this->alp->request('order',['id'=>$id],'GET')->contents();
     }
 
     /**
@@ -35,7 +35,7 @@ class Orders
      * @return array
      */
     public function create($options = []) {
-        return $this->alp->request('orders',$options,'POST')->results();
+        return $this->alp->request('orders',$options,'POST')->contents();
     }
 
     /**
@@ -44,7 +44,7 @@ class Orders
      * @return array
      */
     public function replace($id, $options = []) {
-        return $this->alp->request('order',array_merge(['id'=>$id],$options),'PATCH')->results();
+        return $this->alp->request('order',array_merge(['id'=>$id],$options),'PATCH')->contents();
     }
 
     /**
@@ -60,7 +60,7 @@ class Orders
             'after' => $from,
             'until' => $to,
             'direction' => $dir
-        ])->results();
+        ])->contents();
     }
 
     /**
@@ -69,7 +69,7 @@ class Orders
      * @return array
      */
     public function cancel($id) {
-        return $this->alp->request('order',['id'=>$id],'DELETE')->results();
+        return $this->alp->request('order',['id'=>$id],'DELETE')->contents();
     }
 
     /**
@@ -78,6 +78,6 @@ class Orders
      * @return array
      */
     public function cancelAll() {
-        return $this->alp->request('orders',[],'DELETE')->results();
+        return $this->alp->request('orders',[],'DELETE')->contents();
     }
 }

@@ -1,10 +1,11 @@
 <?php namespace Alpaca;
 
 use Alpaca\Request;
-use Alpaca\Account\Account;
-use Alpaca\Account\Orders;
-use Alpaca\Account\Activity;
-use Alpaca\Account\Positions;
+use Alpaca\Api\Account;
+use Alpaca\Api\Orders;
+use Alpaca\Api\Activity;
+use Alpaca\Api\Positions;
+use Alpaca\Api\Asset;
 
 class Alpaca
 {
@@ -56,29 +57,39 @@ class Alpaca
         "positions"   => "/v2/positions",
         "position"    => "/v2/positions/{stock}",
         "activity"    => "/v2/account/activities/{type}",
-        "activities"  => "/v2/account/activities"
+        "activities"  => "/v2/account/activities",
+        "assets"      => "/v2/assets",
+        "assets_symbol" => "/assets/:symbol",
+        "assets_id" => "/assets/:id",
     ];
     
     /**
      * Orders
      *
-     * @var Alpaca\Account\Orders
+     * @var \Alpaca\Api\Orders
      */
     private $orders;
 
     /**
      * positions
      *
-     * @var Alpaca\Account\Positions
+     * @var \Alpaca\Api\Positions
      */
     private $positions;
 
     /**
      * activity
      *
-     * @var Alpaca\Account\Activity
+     * @var \Alpaca\Api\Activity
      */
     private $activity;
+
+    /**
+     * asset
+     *
+     * @var \Alpaca\Api\Asset
+     */
+    private $asset;
 
     /**
      * Set Alpaca 
@@ -140,7 +151,7 @@ class Alpaca
     /**
      * request()
      *
-     * @return Alpaca\Request
+     * @return \Alpaca\Response
      */
     public function request($handle, $params = [], $type = 'GET') {
         return (new Request($this))->send($handle, $params, $type);
@@ -149,7 +160,7 @@ class Alpaca
     /**
      * account()
      *
-     * @return Alpaca\Account\Account
+     * @return \Alpaca\Api\Account
      */
     public function account() {
         return (new Account($this->request('account')->contents()));
@@ -158,7 +169,7 @@ class Alpaca
     /**
      * orders()
      *
-     * @return Alpaca\Account\Orders
+     * @return \Alpaca\Api\Orders
      */
     public function orders()
     {
@@ -172,7 +183,7 @@ class Alpaca
     /**
      * positions()
      *
-     * @return Alpaca\Account\Positions
+     * @return \Alpaca\Api\Positions
      */
     public function positions()
     {
@@ -186,7 +197,7 @@ class Alpaca
     /**
      * activity()
      *
-     * @return Alpaca\Account\Activity
+     * @return \Alpaca\Api\Activity
      */
     public function activity()
     {
@@ -195,6 +206,20 @@ class Alpaca
         }
 
         return ($this->activity = (new Activity($this)));
+    }
+
+    /**
+     * asset()
+     *
+     * @return \Alpaca\Api\Asset
+     */
+    public function asset()
+    {
+        if ($this->asset) {
+            return $this->asset;
+        }
+
+        return ($this->asset = (new Asset($this)));
     }
 
 }

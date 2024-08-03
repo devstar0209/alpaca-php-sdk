@@ -1,4 +1,4 @@
-<?php namespace Alpaca\Account;
+<?php namespace Alpaca\Api;
 
 use Alpaca\Alpaca;
 
@@ -8,7 +8,7 @@ class Activity
     /**
      * Response array
      *
-     * @var Alpaca\Alpaca
+     * @var \Alpaca\Alpaca
      */
     private $alp;
 
@@ -26,7 +26,7 @@ class Activity
      * @return array
      */
     public function get($type, $options=[]) {
-        return $this->alp->request('activity',array_merge(['type'=>$type],$options))->results();
+        return $this->alp->request('activity',array_merge(['type'=>$type],$options))->contents();
     }
 
     /**

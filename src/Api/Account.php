@@ -1,4 +1,4 @@
-<?php namespace Alpaca\Account;
+<?php namespace Alpaca\Api;
 
 class Account
 {
